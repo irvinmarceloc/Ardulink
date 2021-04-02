@@ -1,0 +1,7 @@
+{
+  "name": "Ardulink",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
