@@ -3,20 +3,24 @@
     <ion-title>
       Ardutooth
     </ion-title>
+    <ion-button expand="block" slot="end" color="danger" (click)="disconnected()"><ion-icon name="bluetooth-outline"></ion-icon></ion-button>
+    <ion-button expand="block" slot="end" color="success" (click)="deviceConnected()"><ion-icon name="reload-circle-outline"></ion-icon></ion-button>
+    
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   
-  <div id="container">
-    <div *ngFor= "let device of Devices">
-      <p>{{device.name}}</p>
-      <p>{{device.address}}</p>
-      <p>{{device.id}}</p>
-      <p>{{device.class}}</p>
-      
-      <button (click)="connect(data.address)" ></button>
+  <div id="container" >
+    <div *ngFor= "let device of Devices" >
+      <ion-card  >
+        <ion-card-content (click)="isConnect(device.address, device.name)"> {{device.name}}
+          {{device.address}}
+          {{device.id}}
+          {{device.class}}</ion-card-content>
+      </ion-card>
+    
     </div>
   </div>
-  
+
 </ion-content>

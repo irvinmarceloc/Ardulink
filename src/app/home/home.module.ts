@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 
+
 @NgModule({
   imports: [
     CommonModule,

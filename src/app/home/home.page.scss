@@ -1,16 +1,17 @@
 #container {
-  text-align: center;
+  text-align:up;
 
-  position: absolute;
+  position: relative;
   left: 0;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 5%;
+  transform: translateY(0%);
 }
 
 #container strong {
   font-size: 20px;
   line-height: 26px;
+  background: #443131;
 }
 
 #container p {
@@ -24,4 +25,5 @@
 
 #container a {
   text-decoration: none;
+  background: #443131;
 }

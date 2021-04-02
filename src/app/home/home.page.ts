@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
-import { AlertController } from '@ionic/angular'
+import { AlertController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -8,10 +10,13 @@ import { AlertController } from '@ionic/angular'
 })
 
 export class HomePage {
-  Devices
+  Devices = [{"name": 'B1', "address": '123', "id":'1', "class":'Arduino'},
+  {"name": 'B1', "address": '123', "id":'1', "class":'Arduino'},
+  {"name": 'B1', "address": '123', "id":'1', "class":'Arduino'}  ]
   constructor(
     private bluetoothSerial: BluetoothSerial,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingController: LoadingController
   ) {}
   /*Enviar datos*/
   sendData(data){
@@ -22,7 +27,7 @@ export class HomePage {
     })
   }
   /*Desconectar del dispositivo*/
-  Disconnected(){
+  disconnected(){
     this.bluetoothSerial.disconnect()
     console.log('dispositivo desconectado')
   }
@@ -62,15 +67,37 @@ export class HomePage {
   }
   /* Fin isEnabled */
   /* Funcion Connect*/
+  async isConnect(address, name){
+    const alert= await this.alertController.create({
+      header: 'Alerta',
+      message: 'Desea conectarse a este dispositivo '+ name,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        },
+        {text: 'Ok',
+          handler: ()=>{
+            this.connect(address)
+          }
+        }, 
+      ]
+    })
+    await alert.present();
+  }
+  
   connect(address){
     this.bluetoothSerial.connect(address).subscribe(success=>{
-
+        
     },error=>{
-      console.log();
+      console.log(error);
     })
-    /* Fin Connect*/
-
   }
+  /* Fin Connect*/
   /* Funcion Device connected*/
   deviceConnected(){
     this.bluetoothSerial.subscribe('\n').subscribe(success=>{
