@@ -1,10 +1,10 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header class="ion-header" [translucent]="true">
+  <ion-toolbar >
     <ion-title>
       Ardutooth
     </ion-title>
     <ion-button expand="block" slot="end" color="danger" (click)="disconnected()"><ion-icon name="bluetooth-outline"></ion-icon></ion-button>
-    <ion-button expand="block" slot="end" color="success" (click)="deviceConnected()"><ion-icon name="reload-circle-outline"></ion-icon></ion-button>
+    <ion-button expand="block" slot="end" color="success" (click)="Listdevices()"><ion-icon name="reload-circle-outline"></ion-icon></ion-button>
     
   </ion-toolbar>
 </ion-header>
@@ -14,13 +14,17 @@
   <div id="container" >
     <div *ngFor= "let device of Devices" >
       <ion-card  >
-        <ion-card-content (click)="isConnect(device.address, device.name)"> {{device.name}}
-          {{device.address}}
-          {{device.id}}
-          {{device.class}}</ion-card-content>
+        <ion-card-content (click)="isConnect(device.address, device.name)"> 
+          {{device.name}}
+        </ion-card-content>
       </ion-card>
     
     </div>
   </div>
+  <ion-fab color="danger" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentAlertPrompt()">
+      <ion-icon name="send"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

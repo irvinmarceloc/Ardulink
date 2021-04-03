@@ -10,14 +10,14 @@ import { LoadingController } from '@ionic/angular';
 })
 
 export class HomePage {
-  Devices = [{"name": 'B1', "address": '123', "id":'1', "class":'Arduino'},
-  {"name": 'B1', "address": '123', "id":'1', "class":'Arduino'},
-  {"name": 'B1', "address": '123', "id":'1', "class":'Arduino'}  ]
+  Devices 
   constructor(
     private bluetoothSerial: BluetoothSerial,
     private alertController: AlertController,
     private loadingController: LoadingController
-  ) {}
+  ) {
+    this.Listdevices();
+  }
   /*Enviar datos*/
   sendData(data){
     this.bluetoothSerial.write(data).then(Response=>{
@@ -26,16 +26,50 @@ export class HomePage {
       console.log("Hubo problemas problema")
     })
   }
+  async presentAlertPrompt() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Enviar',
+      inputs: [
+        {
+          name: 'data',
+          type: 'text',
+          placeholder: 'ingrese mensaje'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Ok',
+          handler: data => {
+            this.presentLoading();
+            this.sendData(data["data"]);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+
   /*Desconectar del dispositivo*/
-  disconnected(){
+  async disconnected(){
     this.bluetoothSerial.disconnect()
+    await this.presentLoading()
+    this.isEnabled("Dispositivo desconectado")
     console.log('dispositivo desconectado')
   }
   /* Funcion OnBluetooth */
   onBluetooth(){
     this.bluetoothSerial.isEnabled().then(Response=>{
       this.isEnabled("Activado");
-      this.Listdevices()
     }, error =>{
       this.isEnabled("Desactivado")
     })
@@ -43,6 +77,7 @@ export class HomePage {
   /* Fin Onbluetooth*/
   /* Funcion Listdevices */
   Listdevices(){
+    this.onBluetooth();
     this.bluetoothSerial.list().then(
       response=> {
         this.Devices = response
@@ -64,6 +99,7 @@ export class HomePage {
         }
       }]
     })
+    await alert.present();
   }
   /* Fin isEnabled */
   /* Funcion Connect*/
@@ -89,7 +125,6 @@ export class HomePage {
     })
     await alert.present();
   }
-  
   connect(address){
     this.bluetoothSerial.connect(address).subscribe(success=>{
         
@@ -109,5 +144,17 @@ export class HomePage {
   /* hundler */ 
   hundler(value){
     console.log(value)
+  }
+  /*Cargando */ 
+  async presentLoading() {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...',
+      duration: 2000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed!');
   }
 }
